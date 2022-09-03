@@ -1,0 +1,4 @@
+Call to doSomething took 35.73557399958372 milliseconds.
+Proof Temp_Suburb:  { verified: true, error: undefined }
+Call to doSomething took 33.68961799889803 milliseconds.
+Proof Temp_Suburb:  { verified: true, error: undefined }

@@ -44,6 +44,7 @@ client.on('message', function (topic, message) {
   const temperature = temp_with_GPS_object["Temperature"]
   const GPS_Lat = temp_with_GPS_object["GPS-Lat"]
   const GPS_Long = temp_with_GPS_object["GPS-Long"]
+  const suburb = temp_with_GPS_object["Suburb"]
 
   //publisher timestamp
   const t0 = temp_with_GPS_object["Timestamp"].toString()
@@ -78,11 +79,23 @@ client.on('message', function (topic, message) {
     }
     var n_subs = data
     console.log(n_subs +", "+ delay.toFixed(2))
+
+    const data_delay = data + ", " + delay.toFixed(2) + '\n'
+    fs.appendFile("../sub_topic_B/all_delay_topic_B.csv", data_delay, (err) => {
+      if (err)
+        console.log(err);
+      else {
+      }
+    });
   });
 
 
 
- console.log("\nDelay in ms: " + delay.toFixed(2))
+
+
+
+
+ //console.log("\nDelay in ms: " + delay.toFixed(2))
  // console.log(n_subs +": "+ delay.toFixed(2))
 
 

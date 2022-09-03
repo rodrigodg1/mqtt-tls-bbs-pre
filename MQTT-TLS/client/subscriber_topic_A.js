@@ -66,14 +66,23 @@ client.on('message', function (topic, message) {
   var delay = (end_time_seconds_and_ms - started_time_seconds_and_ms) * 1000
 
 
-
-  fs.readFile('n_of_subs.txt', 'utf8', function (err, data) {
+  fs.readFile('n_of_subs.txt', 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
     }
     var n_subs = data
-    console.log(data +", "+ delay.toFixed(2))
+    console.log(n_subs +", "+ delay.toFixed(2))
+
+    const data_delay = data + ", " + delay.toFixed(2) + '\n'
+    fs.appendFile("../sub_topic_A/all_delay_topic_A.csv", data_delay, (err) => {
+      if (err)
+        console.log(err);
+      else {
+      }
+    });
   });
+
+
 
 
 

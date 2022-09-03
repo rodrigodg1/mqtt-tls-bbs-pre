@@ -46,7 +46,7 @@ function publish_temp_with_suburb(params) {
 function publish_temp_with_gps(params) {
   
   var t0 = new Date().toISOString()
-  const temp_with_GPS_object = {"Temperature":"82","GPS-Lat":"30","GPS-Long":"123", "Timestamp": t0 }
+  const temp_with_GPS_object = {"Temperature":"82","Suburb": "2398","GPS-Lat":"30","GPS-Long":"123", "Timestamp": t0 }
   var temp_with_GPS = JSON.stringify(temp_with_GPS_object);
 
 
