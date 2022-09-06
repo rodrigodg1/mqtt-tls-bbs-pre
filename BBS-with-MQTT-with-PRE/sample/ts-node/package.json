@@ -8,7 +8,9 @@
   "private": false,
   "scripts": {
     "publisher": "ts-node ./src/publisher.ts",
-    "server-bbs": "ts-node ./src/server.ts"
+    "server-bbs": "ts-node ./src/server.ts",
+    "sub-a-verifier": "ts-node ./src/Sub_A_verify_proof.ts",
+    "sub-b-verifier": "ts-node ./src/Sub_B_verify_proof.ts"
   },
   "devDependencies": {
     "@types/node": "12.7.2",

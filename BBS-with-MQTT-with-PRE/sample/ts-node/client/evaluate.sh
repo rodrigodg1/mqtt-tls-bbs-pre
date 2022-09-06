@@ -1,5 +1,7 @@
 #!/bin/bash
 
+killall python3
+
 
 echo "Removing Last Evaluation ..."
 
@@ -16,7 +18,7 @@ rm -rf ../sub_topic_B/8_subs/sub_B_*
 rm -rf ../sub_topic_B/all_delay*
 
 #closes the clients process
-killall node
+killall python3
 
 
 
@@ -27,7 +29,15 @@ echo "Subscribers, Delay (ms)" >> ../sub_topic_B/all_delay_topic_B.csv
 
 
 
-sleep 3
+#broker process to re-ecnrypt
+
+python3 broker-reencription-subA.py &
+python3 broker-reencription-subB.py &
+
+
+sleep 6
+
+
 
 echo "Starting 2 Subs Evaluation ... "
 echo -n "2 Subscribers" > n_of_subs.txt
@@ -35,19 +45,18 @@ echo -n "2 Subscribers" > n_of_subs.txt
 for i in {1..2}
 do
     #process client
-    node subscriber_topic_A.js >> ../sub_topic_A/2_subs/sub_A_$i.csv &
-    node subscriber_topic_B.js >> ../sub_topic_B/2_subs/sub_B_$i.csv &
+    python3 sub_re_enc_TOPIC_A.py  &
+    python3 sub_re_enc_TOPIC_B.py  &
 
 done
 
 ./run_publisher.sh
-sleep 2
-killall node
+sleep 5
+killall python3
 
+python3 broker-reencription-subA.py &
+python3 broker-reencription-subB.py &
 
-# add all results from last process to delay file
-cat ../sub_topic_A/2_subs/sub_A_2.csv >> ../sub_topic_A/all_delay_topic_A.csv
-cat ../sub_topic_B/2_subs/sub_B_2.csv >> ../sub_topic_B/all_delay_topic_B.csv
 
 
 echo "Starting 4 Subs Evaluation ... "
@@ -56,18 +65,18 @@ echo -n "4 Subscribers" > n_of_subs.txt
 for i in {1..4}
 do
 
-
-    node subscriber_topic_A.js >> ../sub_topic_A/4_subs/sub_A_$i.csv &
-    node subscriber_topic_B.js >> ../sub_topic_B/4_subs/sub_B_$i.csv &
+    python3 sub_re_enc_TOPIC_A.py  &
+    python3 sub_re_enc_TOPIC_B.py  &
 
 done
 
 ./run_publisher.sh
-sleep 2
-killall node
+sleep 5
+killall python3
 
-cat ../sub_topic_A/4_subs/sub_A_4.csv >> ../sub_topic_A/all_delay_topic_A.csv
-cat ../sub_topic_B/4_subs/sub_B_4.csv >> ../sub_topic_B/all_delay_topic_B.csv
+python3 broker-reencription-subA.py &
+python3 broker-reencription-subB.py &
+
 
 
 echo "Starting 6 Subs Evaluation ... "
@@ -77,19 +86,18 @@ for i in {1..6}
 do
 
 
-    node subscriber_topic_A.js >> ../sub_topic_A/6_subs/sub_A_$i.csv &
-    node subscriber_topic_B.js >> ../sub_topic_B/6_subs/sub_B_$i.csv &
+    python3 sub_re_enc_TOPIC_A.py >> ../sub_topic_A/6_subs/sub_A_$i.csv &
+    python3 sub_re_enc_TOPIC_B.py >> ../sub_topic_B/6_subs/sub_B_$i.csv &
 
 done
 
 
 ./run_publisher.sh
-sleep 2
-killall node
+sleep 5
+killall python3
 
-
-cat ../sub_topic_A/6_subs/sub_A_6.csv >> ../sub_topic_A/all_delay_topic_A.csv
-cat ../sub_topic_B/6_subs/sub_B_6.csv >> ../sub_topic_B/all_delay_topic_B.csv
+python3 broker-reencription-subA.py &
+python3 broker-reencription-subB.py &
 
 
 
@@ -100,16 +108,14 @@ echo -n "8 Subscribers" > n_of_subs.txt
 for i in {1..8}
 do
   
-    node subscriber_topic_A.js >> ../sub_topic_A/8_subs/sub_A_$i.csv &
-    node subscriber_topic_B.js >> ../sub_topic_B/8_subs/sub_B_$i.csv &
+    python3 sub_re_enc_TOPIC_A.py >> ../sub_topic_A/8_subs/sub_A_$i.csv &
+    python3 sub_re_enc_TOPIC_B.py >> ../sub_topic_B/8_subs/sub_B_$i.csv &
 
 done
 
 ./run_publisher.sh
-sleep 2
-killall node
+sleep 5
+killall python3
 
-cat ../sub_topic_A/8_subs/sub_A_8.csv >> ../sub_topic_A/all_delay_topic_A.csv
-cat ../sub_topic_B/8_subs/sub_B_8.csv >> ../sub_topic_B/all_delay_topic_B.csv
 
 echo -n "" > n_of_subs.txt

@@ -12,7 +12,6 @@
  */
 
 "use strict";
-
 import { readFileSync } from "fs";
 const execSync = require("child_process").execSync;
 
@@ -50,6 +49,7 @@ import { Console } from "console";
 
 
 
+
 const main = async () => {
   try {
     //Generate a new key pair
@@ -64,7 +64,7 @@ const main = async () => {
 
 
     //topic between publisher and server
-    client.subscribe("alldata");
+    client.subscribe("temp_with_suburb");
 
 
 
@@ -73,31 +73,20 @@ const main = async () => {
 
       //console.log(message.toString())
       
-      
       const received_data_from_publisher = JSON.parse(message.toString());
+
       console.log(received_data_from_publisher)
 
       
       const temperature = received_data_from_publisher["Temperature"];
       const suburb = received_data_from_publisher["Suburb"];
-      const latitude = received_data_from_publisher["GPS_Lat"];
-      const longitude = received_data_from_publisher["GPS_Long"];
-      const capsule_temp = received_data_from_publisher["Capsule_Temperature"];
-      const capsule_gps_lat = received_data_from_publisher["Capsule_GPS_lat"];
-      const capsule_gps_long = received_data_from_publisher["Capsule_GPS_long"];
-      const capsule_suburb = received_data_from_publisher["Capsule_Suburb"]
-      //const signature = received_data["Signature"];
       const timestamp_from_publisher = received_data_from_publisher["Publisher_Timestamp"]
 
 
-      console.log("Temperature: ", temperature)
-      console.log("Suburb: ", suburb)
-      console.log("Latitude: ", latitude)
-      console.log("Longitude: ", longitude)
-      console.log("CAP. Temp: ", capsule_temp)
-      console.log("CAP. GPS LAT: ", capsule_gps_lat)
-      console.log("CAP. GPS LONG: ", capsule_gps_long)
-      console.log("CAP. Suburb: ", capsule_suburb)
+
+
+      //console.log("Temperature: ", temperature)
+      //console.log("Suburb: ", suburb)
       //console.log("Signature: ", signature)
       console.log("Publisher Timestamp: ", timestamp_from_publisher)
 
@@ -105,13 +94,7 @@ const main = async () => {
 
       const messages = [
         Uint8Array.from(Buffer.from(temperature.toString(), "utf8")),
-        Uint8Array.from(Buffer.from(capsule_temp.toString(), "utf8")),
         Uint8Array.from(Buffer.from(suburb.toString(), "utf8")),
-        Uint8Array.from(Buffer.from(capsule_suburb.toString(), "utf8")),
-        Uint8Array.from(Buffer.from(latitude.toString(), "utf8")),
-        Uint8Array.from(Buffer.from(capsule_gps_lat.toString(), "utf8")),
-        Uint8Array.from(Buffer.from(longitude.toString(), "utf8")),
-        Uint8Array.from(Buffer.from(capsule_gps_long.toString(), "utf8")),
       ];
 
 
@@ -123,31 +106,41 @@ const main = async () => {
 
       
     //Verify the signature
+    /*
     const isVerified = await blsVerify({
       publicKey: keyPair.publicKey,
       messages: messages,
       signature,
     });
+    */
 
   
 
     //create a proof for first version
+
     const proof_temp_suburb = await blsCreateProof({
       signature,
       publicKey: keyPair.publicKey,
       messages,
       nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
-      revealed: [0, 1,2,3], //temperature and suburb position and capsules
+      revealed: [0, 1], //temperature and suburb position and capsules
     });
+   
 
+    const isProofVerified = await blsVerifyProof({
+      proof:proof_temp_suburb,
+      publicKey: keyPair.publicKey,
+      messages: messages.slice(0, 2),
+      nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
+    });
+    console.log("Proof Temp_Suburb: ", isProofVerified )
 
+    
 
     //create a object with version 2 to send to the subscribers
     var temp_suburb = {
       Temperature: temperature,
-      Capsule_Temperature: capsule_temp,
       Suburb: suburb,
-      Capsule_Suburb: capsule_suburb,
       Proof_Temp_Suburb: proof_temp_suburb,
       Publisher_Timestamp: timestamp_from_publisher,
       Server:true
@@ -155,58 +148,18 @@ const main = async () => {
     var temp_with_suburb_string = JSON.stringify(temp_suburb);
 
 
-
-    // first publication, temperature and suburb data with derived proof
-    client.publish("temp_with_suburb", temp_with_suburb_string);
+    
 
 
+    client.publish("temp_with_suburb_verified", temp_with_suburb_string);
 
-
-    //Derive a proof for second version
-    const proof_all_items = await blsCreateProof({
-      signature,
-      publicKey: keyPair.publicKey,
-      messages,
-      nonce: Uint8Array.from(Buffer.from("nonce", "utf8")),
-      revealed: [0, 1, 2,3,4,5,6,7], //all items and capsules
-    });
-
-
-    //create a object with version 2 to send to the subscribers
-    var temp_with_gps = {
-      Temperature: temperature,
-      Capsule_Temperature: capsule_temp,
-
-      Lat_GPS: latitude,
-      Capsule_gps_lat: capsule_gps_lat,
-
-      Long_GPS: longitude,
-      Capsule_gps_long: capsule_gps_long,
-
-      Suburb: suburb,
-      Capsule_Suburb: capsule_suburb,
-      
-      Proof_All_Items: proof_all_items,
-      Publisher_Timestamp: timestamp_from_publisher,
-      Server:true
-    };
-    var temp_with_gps_json = JSON.stringify(temp_with_gps);
-
-
-
-
-    // second publication, all data with derived proof
-    client.publish("temp_with_gps", temp_with_gps_json);
 
 
     console.log("Published !");
 
 
-
-      
     });
 
-    
 
 
 
