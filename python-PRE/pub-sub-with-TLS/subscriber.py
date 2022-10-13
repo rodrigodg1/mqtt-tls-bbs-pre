@@ -2,10 +2,11 @@ import paho.mqtt.client as mqtt
 import ssl
 
 
+
 TLS_CERT_PATH = "certs/ca/ca.crt"
 client_cert = "client/client.crt"
 broker_endpoint = "localhost"
-port = 1333
+port = 8883
 key = "client/client.key"
 
 
@@ -15,7 +16,7 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("temp_with_suburb")
+    client.subscribe("teste")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -30,8 +31,7 @@ client.tls_set(ca_certs=TLS_CERT_PATH, certfile=client_cert,
                     tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
 
 
-client.tls_insecure_set(False)
-
+client.tls_insecure_set(True)
 
 
 client.on_message = on_message

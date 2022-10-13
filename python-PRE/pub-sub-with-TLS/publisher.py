@@ -20,7 +20,8 @@ client.tls_set(ca_certs=TLS_CERT_PATH, certfile=client_cert,
                     tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
 
 
-client.tls_insecure_set(False)
+client.tls_insecure_set(True)
+
 
 client.connect(broker_endpoint, port, 60)
 
