@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import ssl
 
 
+
 TLS_CERT_PATH = "certs/ca/ca.crt"
 client_cert = "client/client.crt"
 broker_endpoint = "localhost"
@@ -12,7 +13,7 @@ key = "client/client.key"
 client = mqtt.Client()
 
 
-# The callback for when the client receives a CONNACK response from the server.
+# The callback for when the client r8883eceives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+ str(rc))
 
