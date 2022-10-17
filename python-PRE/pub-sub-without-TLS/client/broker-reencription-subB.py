@@ -34,6 +34,8 @@ def on_message(client, userdata, msg):
 
     #print(received_data['Publisher_Timestamp'])
 
+    publisher_id_transaction = received_data['id']
+
 
     alices_secret_key = SecretKey.random()
     alices_public_key = alices_secret_key.public_key()
@@ -114,6 +116,7 @@ def on_message(client, userdata, msg):
 
 
     all_reencrypted_to_B = {
+        "id": publisher_id_transaction,
         "Temperature_ReEnc": str(cfrags_temp),
         "GPS_Lat_ReEnc": str(gps_lat_ciphertext),
         "GPS_Long_ReEnc": str(gps_long_ciphertext),

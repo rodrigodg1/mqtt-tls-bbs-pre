@@ -30,7 +30,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     #print(msg.topic+" "+str(msg.payload))
     received_data = json.loads(msg.payload)
-    # print(all_data)
+    print(received_data)
 
     #print(received_data['Publisher_Timestamp'])
 

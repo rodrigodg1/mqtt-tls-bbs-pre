@@ -79,7 +79,7 @@
     "@mattrglobal/node-bbs-signatures": "0.13.0"
   },
   "dependencies": {
-    "@mattrglobal/bbs-signatures": "^1.0.0",
+    "@mattrglobal/bbs-signatures": "^1.1.0",
     "@stablelib/random": "1.0.0",
     "mqtt": "^4.3.7"
   }

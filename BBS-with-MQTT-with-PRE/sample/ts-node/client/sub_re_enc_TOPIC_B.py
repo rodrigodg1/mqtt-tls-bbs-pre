@@ -43,18 +43,9 @@ def on_message(client, userdata, msg):
 
 
 
-
-
-    #print(temp_cleartext)
-    #print(gps_lat_cleartext)
-    #print(gps_long_cleartext)
-   # print(suburb_cleartext)
-
-
-
     #print(msg.topic+" "+str(msg.payload))
     received_data = json.loads(msg.payload)
-    #print(all_data)
+    print(received_data)
 
 
     temperature = received_data['Temperature_ReEnc']

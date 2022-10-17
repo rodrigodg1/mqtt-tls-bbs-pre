@@ -138,7 +138,7 @@ def on_message(client, userdata, msg):
     received_data = json.loads(msg.payload)
     #print(all_data)
 
-
+    publisher_id_transaction = received_data['id']    
     temperature = received_data['Temperature_ReEnc']
     #capsule_temp = received_data['Capsule_Temperature']
     lat_gps = received_data['GPS_Lat_ReEnc']
@@ -156,19 +156,25 @@ def on_message(client, userdata, msg):
 
     end_time =  datetime.now()
     
-
+    #2022-10-17 11:25:35.358969
     publisher_start_time = received_data['Publisher_Timestamp']
+   # print("Start Time:", publisher_start_time)
     publisher_start_time = publisher_start_time.split(" ")
     publisher_start_time = publisher_start_time[1].split(":")
     publisher_start_time_minute = publisher_start_time[1]
+    #print("Start Time MINUTE:", publisher_start_time_minute)
     publisher_start_time_seconds = publisher_start_time[2]
+   # print("Start Time SECONDS:", publisher_start_time_seconds)
 
 
     end_time= str(datetime.now())
+    #print("End Time:", end_time)
     end_time = end_time.split(" ")
     end_time = end_time[1].split(":")
     end_time_minute = end_time[1]
+    #print("End Time MINUTE:", end_time_minute)
     end_time_seconds = end_time[2]
+    #print("End Time SECONDS:", end_time_seconds)
 
 
     delay_minutes = float(end_time_minute) - float(publisher_start_time_minute)
@@ -192,7 +198,10 @@ def on_message(client, userdata, msg):
     delay_ms = delay_seconds*1000
     delay_ms = "%.2f" %delay_ms
 
-    #print(delay_ms)
+    print("Delay (ms): ",delay_ms) 
+
+    #print("\n")
+
 
 
     f = open("n_of_subs.txt", "r")
@@ -200,15 +209,32 @@ def on_message(client, userdata, msg):
     n_of_subs = f.read()
 
 
-    n_of_subs_delay_ms = f"{n_of_subs},{delay_ms}"
+    n_of_subs_delay_ms = f"{publisher_id_transaction},{n_of_subs},{delay_ms}"
     n_of_subs_delay_ms = str(n_of_subs_delay_ms)
 
-    f = open("../sub_topic_B/all_delay_topic_B.csv", "a")
+    
+    f = open("evaluation/delay.csv", "a")
     f.write(str(n_of_subs_delay_ms))
     f.write("\n")
     f.close()
-    
-    print(n_of_subs_delay_ms)
+
+
+    #print(n_of_subs_delay_ms)
+
+
+    #end time of received transaction
+    f = open("evaluation/end_evaluation_time.txt", "a")
+    f.write(str(datetime.now()))
+    f.write("\n")
+    f.close()
+
+
+
+
+
+
+
+
 
 
 client = mqtt.Client()

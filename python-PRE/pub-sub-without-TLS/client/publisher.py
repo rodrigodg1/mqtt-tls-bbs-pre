@@ -6,7 +6,7 @@ import paho.mqtt.publish as publish
 import json
 import pickle
 from datetime import datetime
-
+import os
 
 
 
@@ -33,6 +33,20 @@ sub_b_secret_key = SecretKey.random()
 sub_b_public_key = sub_b_secret_key.public_key()
 
 
+pid = os.getpid()
+
+f = open("transaction_id.txt", "w")
+f.write(str(pid))
+f.close()
+
+
+f = open("transaction_id.txt", "r")
+id = f.read()
+
+
+
+now = datetime.now()
+
 
 # Encrypt data with Alice's public key.
 
@@ -57,11 +71,11 @@ capsule_suburb, suburb_ciphertext = encrypt(alices_public_key, Suburb)
 
 
 #create a delegation key for sub A
-kfrags_sub_A = generate_kfrags(delegating_sk=alices_secret_key,
-                         receiving_pk=sub_a_public_key,
-                         signer=alices_signer,
-                         threshold=1,
-                         shares=1)
+#kfrags_sub_A = generate_kfrags(delegating_sk=alices_secret_key,
+#                        receiving_pk=sub_a_public_key,
+#                        signer=alices_signer,
+#                        threshold=1,
+#                        shares=1)
 
 #create a delegation key for sub B
 kfrags_sub_B = generate_kfrags(delegating_sk=alices_secret_key,
@@ -70,10 +84,8 @@ kfrags_sub_B = generate_kfrags(delegating_sk=alices_secret_key,
                          threshold=1,
                          shares=1)
 
-now = datetime.now()
 
-
-
+'''
 temp_suburb_data = {
 
     "Temperature": str(temp_ciphertext),
@@ -83,14 +95,15 @@ temp_suburb_data = {
     "Publisher_Timestamp":str(now)
 
 }
-
+'''
 
 temp_with_gps_data = {
+    "id": id,
     "Temperature": str(temp_ciphertext),
     "GPS_Lat": str(gps_lat_ciphertext),
     "GPS_Long": str(gps_long_ciphertext),
     "Suburb": str(suburb_ciphertext),
-    "Delegation_key_sub_a": str(kfrags_sub_A),
+    #"Delegation_key_sub_a": str(kfrags_sub_A),
     "Delegation_key_sub_b": str(kfrags_sub_B),
     "Capsule_Temperature": str(capsule_temp),
     "Capsule_GPS_lat": str(capsule_gps_lat),
@@ -102,12 +115,12 @@ temp_with_gps_data = {
 }
 #print(all_data)
 
-temp_suburb_data = json.dumps(temp_suburb_data)
+#temp_suburb_data = json.dumps(temp_suburb_data)
 temp_with_gps_data = json.dumps(temp_with_gps_data)
 
 
 #publish.single("alldata", pickle.dumps(all_data),hostname=broker, port=broker_port)
-publish.single("temp_with_suburb",temp_suburb_data,hostname=broker, port=broker_port)
+#publish.single("temp_with_suburb",temp_suburb_data,hostname=broker, port=broker_port)
 
 publish.single("temp_with_gps",temp_with_gps_data,hostname=broker, port=broker_port)
 #publish.single("teste2", "hi",hostname=broker, port=broker_port)

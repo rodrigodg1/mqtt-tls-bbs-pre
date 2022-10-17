@@ -17,10 +17,6 @@ rm -rf ../sub_topic_B/6_subs/sub_B_*
 rm -rf ../sub_topic_B/8_subs/sub_B_*
 rm -rf ../sub_topic_B/all_delay*
 
-#closes the clients process
-killall python3
-
-
 
 #header for delay file
 echo "Subscribers, Delay (ms)" >> ../sub_topic_A/all_delay_topic_A.csv
