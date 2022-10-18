@@ -40,6 +40,8 @@ sleep 2
 
 ./run_server-and-verifier.sh
 
+sleep 2
+
 
 
 python3 start_evaluation_time.py

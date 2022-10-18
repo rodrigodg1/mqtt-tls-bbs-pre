@@ -201,7 +201,7 @@ def on_message(client, userdata, msg):
     n_of_subs_delay_ms = f"{n_of_subs},{delay_ms}"
     n_of_subs_delay_ms = str(n_of_subs_delay_ms)
 
-    f = open("../sub_topic_B/all_delay_topic_B.csv", "a")
+    f = open("evaluation/delay.csv", "a")
     f.write(str(n_of_subs_delay_ms))
     f.write("\n")
     f.close()

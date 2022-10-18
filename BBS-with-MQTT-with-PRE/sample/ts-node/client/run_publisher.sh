@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-for i in {1..100}
+for i in {1..4}
 do
     echo "Execution $i/100"
     #sleep 5

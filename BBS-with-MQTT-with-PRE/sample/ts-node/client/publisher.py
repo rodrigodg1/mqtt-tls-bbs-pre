@@ -57,11 +57,11 @@ capsule_suburb, suburb_ciphertext = encrypt(alices_public_key, Suburb)
 
 
 #create a delegation key for sub A
-kfrags_sub_A = generate_kfrags(delegating_sk=alices_secret_key,
-                         receiving_pk=sub_a_public_key,
-                         signer=alices_signer,
-                         threshold=1,
-                         shares=1)
+#kfrags_sub_A = generate_kfrags(delegating_sk=alices_secret_key,
+#                         receiving_pk=sub_a_public_key,
+ #                        signer=alices_signer,
+#                         threshold=1,
+ #                        shares=1)
 
 #create a delegation key for sub B
 kfrags_sub_B = generate_kfrags(delegating_sk=alices_secret_key,
@@ -91,7 +91,7 @@ all_data = {
     "GPS_Lat": str(gps_lat_ciphertext),
     "GPS_Long": str(gps_long_ciphertext),
     "Suburb": str(suburb_ciphertext),
-    "Delegation_key_sub_a": str(kfrags_sub_A),
+    #"Delegation_key_sub_a": str(kfrags_sub_A),
     "Delegation_key_sub_b": str(kfrags_sub_B),
     "Capsule_Temperature": str(capsule_temp),
     "Capsule_GPS_lat": str(capsule_gps_lat),
